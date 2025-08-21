@@ -57,7 +57,7 @@ class AppointmentsController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $appointment == Appointments::update($validator->validated());
+        $appointment -> update($validator->validated());
         return response()->json($appointment, 200);
 
     }

@@ -61,7 +61,7 @@ class PatientsController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $patient == Patients::update($validator->validated());
+        $patient -> update($validator->validated());
         return response()->json($patient, 200);
 
     }

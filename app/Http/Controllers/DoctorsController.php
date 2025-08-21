@@ -60,7 +60,7 @@ class DoctorsController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $doctor == Doctors::update($validator->validated());
+        $doctor -> update($validator->validated());
         return response()->json($doctor, 200);
 
     }
