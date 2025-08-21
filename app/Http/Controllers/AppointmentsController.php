@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class AppointmentsController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $Appointments = Appointments::all();
         return response()->json($Appointments, 200);
     }
@@ -16,13 +17,11 @@ class AppointmentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'identification' => 'required|string',
-            'dob' => 'required|date',
-            'gender' => 'required',
-            'phone' => 'required|string',
-            'email' => 'required|string',
+            'patientId'=>'required',
+            'doctorId'=>'required',
+            'appointment_date_time'=>'required',
+            'reason'=>'required',
+            'status'=>'required'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
@@ -47,13 +46,11 @@ class AppointmentsController extends Controller
         $appointment = Appointments::find($id);
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'identification' => 'required|string',
-            'dob' => 'required|date',
-            'gender' => 'required',
-            'phone' => 'required|string',
-            'email' => 'required|string',
+            'patientId'=>'required',
+            'doctorId'=>'required',
+            'appointment_date_time'=>'required',
+            'reason'=>'required',
+            'status'=>'required'
         ]);
 
         if ($validator->fails()) {
