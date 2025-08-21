@@ -24,5 +24,5 @@ Route::delete("deleteDoctor/{id}", [DoctorsController::class,"destroy"]);
 Route::get("listAppointments", [AppointmentsController::class,"index"]);
 Route::get("showAppointments/{id}", [AppointmentsController::class,"show"]);
 Route::post("createAppointment", [AppointmentsController::class,"store"]);
-Route::put("editAppointments/{id}", [AppointmentsController::class,"update"]);
+Route::put("editAppointment/{id}", [AppointmentsController::class,"update"]);
 Route::delete("deleteAppointment/{id}", [AppointmentsController::class,"destroy"]);
