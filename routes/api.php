@@ -23,6 +23,6 @@ Route::delete("deleteDoctor/{id}", [DoctorsController::class,"destroy"]);
 //Routers for appointments
 Route::get("listAppointments", [AppointmentsController::class,"index"]);
 Route::get("showAppointments/{id}", [AppointmentsController::class,"show"]);
-Route::post("createAppointments", [AppointmentsController::class,"store"]);
+Route::post("createAppointment", [AppointmentsController::class,"store"]);
 Route::put("editAppointments/{id}", [AppointmentsController::class,"update"]);
 Route::delete("deleteAppointments/{id}", [AppointmentsController::class,"destroy"]);
