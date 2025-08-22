@@ -73,4 +73,9 @@ class AppointmentsController extends Controller
         return response()->json(['message' => 'The appointment was deleted successfully'], 400);
 
     }
+
+    public function listScheduledAppointments(){
+        $scheduledAppointments = Appointments::where('status','scheduled')->orderBy('created_at','desc')->get();
+        return response()->json($scheduledAppointments,200);
+    }
 }

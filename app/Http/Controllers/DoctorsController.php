@@ -77,5 +77,15 @@ class DoctorsController extends Controller
 
     }
 
+    public function listFemaleDoctors(){
+        $femaleDoctors = Doctors::where('gender','F')->get();
+        return response()->json($femaleDoctors,200);
+    }
+
+    public function listMaleDoctors(){
+        $maleDoctors = Doctors::where('gender','M')->get();
+        return response()->json($maleDoctors,200);
+    }
+
     
 }

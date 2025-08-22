@@ -77,4 +77,14 @@ class PatientsController extends Controller
         return response()->json(['message' => 'The patient was deleted successfully'], 400);
 
     }
+
+    public function listFemalePatients(){
+        $femalePatients = Patients::where('gender','F')->get();
+        return response()->json($femalePatients,200);
+    }
+
+    public function listMalePatients(){
+        $malePatients = Patients::where('gender','M')->get();
+        return response()->json($malePatients,200);
+    }
 }
