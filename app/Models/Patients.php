@@ -25,7 +25,7 @@ class Patients extends Model
 
     public function entity()
     {
-        return $this->belongsTo(Entity::class);
+        return $this->belongsTo(Entities::class);
     }
 
     
