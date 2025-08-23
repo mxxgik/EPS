@@ -3,6 +3,8 @@
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\SpecialtiesController;
+use App\Http\Controllers\EntitiesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +35,18 @@ Route::post("createAppointment", [AppointmentsController::class,"store"]);
 Route::put("editAppointment/{id}", [AppointmentsController::class,"update"]);
 Route::delete("deleteAppointment/{id}", [AppointmentsController::class,"destroy"]);
 Route::get("listScheduledAppointments", [AppointmentsController::class,"listScheduledAppointments"]);
+
+
+//Routers for specialties
+Route::get("listSpecialties", [SpecialtiesController::class,"index"]);
+Route::get("showSpecialties/{id}", [SpecialtiesController::class,"show"]);
+Route::post("createSpecialty", [SpecialtiesController::class,"store"]);
+Route::put("editSpecialty/{id}", [SpecialtiesController::class,"update"]);
+Route::delete("deleteSpecialty/{id}", [SpecialtiesController::class,"destroy"]);
+
+//Routers for entities
+Route::get("listEntities", [EntitiesController::class,"index"]);
+Route::get("showEntities/{id}", [EntitiesController::class,"show"]);
+Route::post("createEntity", [EntitiesController::class,"store"]);
+Route::put("editEntity/{id}", [EntitiesController::class,"update"]);
+Route::delete("deleteEntity/{id}", [EntitiesController::class,"destroy"]);
