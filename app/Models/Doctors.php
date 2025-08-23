@@ -22,4 +22,9 @@ class Doctors extends Model
     {
         return $this->hasMany(Appointments::class, 'doctorId');
     }
+
+    public function specialty()
+    {
+        return $this->belongsTo(Specialties::class);
+    }
 }

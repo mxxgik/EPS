@@ -23,5 +23,10 @@ class Patients extends Model
         return $this->hasMany(Appointments::class, 'patientId');
     }
 
+    public function entity()
+    {
+        return $this->belongsTo(Entity::class);
+    }
+
     
 }
