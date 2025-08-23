@@ -17,6 +17,7 @@ class PatientsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'entity_id' => 'required|string',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'identification' => 'required|string',
@@ -48,6 +49,7 @@ class PatientsController extends Controller
         $patient = Patients::find($id);
 
         $validator = Validator::make($request->all(), [
+            'entity_id' => 'required|string',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'identification' => 'required|string',
