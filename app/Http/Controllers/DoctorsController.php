@@ -18,7 +18,7 @@ class DoctorsController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'specialty' => 'required|string',
+            'specialty_id' => 'required|integer',
             'identification' => 'required|string',
             'gender' => 'required',
             'phone' => 'required|string',
@@ -49,7 +49,7 @@ class DoctorsController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'specialty' => 'required|string',
+            'specialty_id' => 'required|numeric',
             'identification' => 'required|string',
             'gender' => 'required',
             'phone' => 'required|string',
