@@ -33,9 +33,9 @@ class PatientsController extends Controller
         return response()->json($patient, 200);
     }
 
-    public function show(string $id)
+    public function show(Request $request)
     {
-        $patient = Patients::find($id);
+        $patient = $request->user();
 
         if (!$patient) {
             return response()->json(['message' => 'The patient was not found'], 400);
@@ -46,7 +46,8 @@ class PatientsController extends Controller
 
     public function update(Request $request, string $id)
     {
-        $patient = Patients::find($id);
+
+        $patient = $request->user();
 
         $validator = Validator::make($request->all(), [
             'entity_id' => 'required|numeric',
