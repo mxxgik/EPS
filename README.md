@@ -42,3 +42,42 @@ mv .env.example .env
 ```bash
 php artisan key:generate
 ```
+
+### Database Configuration
+
+1) Open the .env file to which you moved the configuration earlier. (you can use whatever text editor you see fit)
+```bash
+nvim .env
+```
+
+2) Set the database connection credentials and information
+```ini
+DB_CONNECTION=mariadb
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=root
+DB_PASSWORD=top_secret_password
+```
+
+3) Create the database which the project will use
+```bash
+mariadb -u root -p top_secret_password;
+CREATE DATABASE your_database_name;
+EXIT;
+```
+
+4) Lastly, run migrations
+```bash
+php artisan migrate
+```
+
+### Running the server
+
+You can run the implemented Laravel development server by running the following command on your terminal, make sure youre on the root of your project:
+```bash
+php artisan serve
+```
+
+## Endpoints
+
