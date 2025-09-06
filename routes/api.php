@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PatientsController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\AppointmentsController;
@@ -8,11 +9,23 @@ use App\Http\Controllers\EntitiesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+//Login
+Route::post("login", [AuthController::class, "login"])->name("login");
+
+//Register
+Route::post("register", [AuthController::class, "register"])->name("register");
+
+//Protected Routes
+Route::group(['middleware'=> ['auth:sanctum']], function () {
+    Route::get('logout',[AuthController::class, "logout"])->name('logout');
+    Route::get("showPatient", [PatientsController::class,"show"]);
+    Route::put("editPatient", [PatientsController::class,"update"]);
+
+});
+
 // Routers for patients 
 Route::get("listPatients", [PatientsController::class,"index"]);
-Route::get("showPatient/{id}", [PatientsController::class,"show"]);
 Route::post("createPatient", [PatientsController::class,"store"]);
-Route::put("editPatient/{id}", [PatientsController::class,"update"]);
 Route::delete("deletePatient/{id}", [PatientsController::class,"destroy"]);
 Route::get("listFemalePatients", [PatientsController::class,"listFemalePatients"]);
 Route::get("listMalePatients", [PatientsController::class,"listMalePatients"]);
