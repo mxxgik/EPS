@@ -22,6 +22,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'entity_id',
+        'last_name',
+        'identification',
+        'dob',
+        'genero',
+        'phone',
+        'role',
+        'specialty_id',
     ];
 
     /**
@@ -45,5 +53,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointments::class, 'user_id');
+    }
+
+    public function specialty()
+    {
+        return $this->belongsTo(Specialties::class);
+    }
+
+    public function entity()
+    {
+        return $this->belongsTo(Entities::class);
     }
 }
