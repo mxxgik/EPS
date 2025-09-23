@@ -16,11 +16,20 @@ Route::post("login", [AuthController::class, "login"])->name("login");
 Route::post("register", [AuthController::class, "register"])->name("register");
 
 //Protected Routes
-Route::group(['middleware'=> ['auth:sanctum']], function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('logout',[AuthController::class, "logout"])->name('logout');
+});
+
+// Patient-specific routes
+Route::middleware(['auth:sanctum', 'role:patient'])->group(function () {
     Route::get("showPatient", [PatientsController::class,"show"]);
     Route::put("editPatient", [PatientsController::class,"update"]);
+});
 
+// Doctor-specific routes
+Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
+    // Add doctor-specific protected routes here
+    // Route::get("doctorDashboard", [DoctorsController::class,"dashboard"]);
 });
 
 // Routers for patients
