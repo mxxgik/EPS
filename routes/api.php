@@ -23,13 +23,12 @@ Route::group(['middleware'=> ['auth:sanctum']], function () {
 
 });
 
-// Routers for patients 
+// Routers for patients
 Route::get("listPatients", [PatientsController::class,"index"]);
 Route::post("createPatient", [PatientsController::class,"store"]);
 Route::delete("deletePatient/{id}", [PatientsController::class,"destroy"]);
 Route::get("listFemalePatients", [PatientsController::class,"listFemalePatients"]);
 Route::get("listMalePatients", [PatientsController::class,"listMalePatients"]);
-
 
 //Routers for doctors
 Route::get("listDoctors", [DoctorsController::class,"index"]);
@@ -40,7 +39,6 @@ Route::delete("deleteDoctor/{id}", [DoctorsController::class,"destroy"]);
 Route::get("listMaleDoctors", [DoctorsController::class,"listMaleDoctors"]);
 Route::get("listFemaleDoctors", [DoctorsController::class,"listFemaleDoctors"]);
 
-
 //Routers for appointments
 Route::get("listAppointments", [AppointmentsController::class,"index"]);
 Route::get("showAppointments/{id}", [AppointmentsController::class,"show"]);
@@ -48,7 +46,6 @@ Route::post("createAppointment", [AppointmentsController::class,"store"]);
 Route::put("editAppointment/{id}", [AppointmentsController::class,"update"]);
 Route::delete("deleteAppointment/{id}", [AppointmentsController::class,"destroy"]);
 Route::get("listScheduledAppointments", [AppointmentsController::class,"listScheduledAppointments"]);
-
 
 //Routers for specialties
 Route::get("listSpecialties", [SpecialtiesController::class,"index"]);
