@@ -17,8 +17,8 @@ class AppointmentsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'patientId'=>'required',
-            'doctorId'=>'required',
+            'patient_user_id'=>'required',
+            'user_id'=>'required',
             'appointment_date_time'=>'required',
             'reason'=>'required',
             'status'=>'required'
@@ -46,8 +46,8 @@ class AppointmentsController extends Controller
         $appointment = Appointments::find($id);
 
         $validator = Validator::make($request->all(), [
-            'patientId'=>'required',
-            'doctorId'=>'required',
+            'patient_user_id'=>'required',
+            'user_id'=>'required',
             'appointment_date_time'=>'required',
             'reason'=>'required',
             'status'=>'required'
