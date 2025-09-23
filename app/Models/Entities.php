@@ -13,8 +13,8 @@ class Entities extends Model
         'code',
     ];
 
-    public function patients()
+    public function users()
     {
-        return $this->hasMany(Patients::class);
+        return $this->hasMany(User::class);
     }
 }

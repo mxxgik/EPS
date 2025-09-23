@@ -9,20 +9,21 @@ class Appointments extends Model
     protected $table = 'appointments';
 
     protected $fillable = [
-        'patientId',
-        'doctorId',
+        'patient_user_id',
+        'user_id',
         'appointment_date_time',
         'reason',
         'status'
     ];
 
-    public function doctor()
+    public function user()
     {
-        return $this->belongsTo(Doctors::class, 'doctorId');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function patient()
     {
-        return $this->belongsTo(Patients::class, 'patientId');
+        return $this->belongsTo(User::class, 'patient_user_id');
     }
+
 }
