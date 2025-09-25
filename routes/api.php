@@ -9,13 +9,11 @@ use App\Http\Controllers\EntitiesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-//Login
+// Public routes
 Route::post("login", [AuthController::class, "login"])->name("login");
-
-//Register
 Route::post("register", [AuthController::class, "register"])->name("register");
 
-//Protected Routes
+// Authenticated routes
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('logout',[AuthController::class, "logout"])->name('logout');
 });
@@ -24,48 +22,51 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum', 'role:patient'])->group(function () {
     Route::get("showPatient", [PatientsController::class,"show"]);
     Route::put("editPatient", [PatientsController::class,"update"]);
+    Route::post("createAppointment", [AppointmentsController::class,"store"]);
+    Route::get("listDoctors", [DoctorsController::class,"index"]);
+    Route::put("editAppointment/{id}", [AppointmentsController::class,"update"]);
 });
 
 // Doctor-specific routes
 Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
-    // Add doctor-specific protected routes here
-    // Route::get("doctorDashboard", [DoctorsController::class,"dashboard"]);
+    Route::get("showDoctor/{id}", [DoctorsController::class,"show"]);
+    Route::put("editDoctor/{id}", [DoctorsController::class,"update"]);
+    Route::get("listPatients", [PatientsController::class,"index"]);
+    Route::put("editAppointment/{id}", [AppointmentsController::class,"update"]);
 });
 
-// Routers for patients
-Route::get("listPatients", [PatientsController::class,"index"]);
-Route::post("createPatient", [PatientsController::class,"store"]);
-Route::delete("deletePatient/{id}", [PatientsController::class,"destroy"]);
-Route::get("listFemalePatients", [PatientsController::class,"listFemalePatients"]);
-Route::get("listMalePatients", [PatientsController::class,"listMalePatients"]);
+// Admin-specific routes
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    // Patients management
+    Route::get("listPatients", [PatientsController::class,"index"]);
+    Route::post("createPatient", [PatientsController::class,"store"]);
+    Route::delete("deletePatient/{id}", [PatientsController::class,"destroy"]);
+    Route::get("listFemalePatients", [PatientsController::class,"listFemalePatients"]);
+    Route::get("listMalePatients", [PatientsController::class,"listMalePatients"]);
 
-//Routers for doctors
-Route::get("listDoctors", [DoctorsController::class,"index"]);
-Route::get("showDoctor/{id}", [DoctorsController::class,"show"]);
-Route::post("createDoctor", [DoctorsController::class,"store"]);
-Route::put("editDoctor/{id}", [DoctorsController::class,"update"]);
-Route::delete("deleteDoctor/{id}", [DoctorsController::class,"destroy"]);
-Route::get("listMaleDoctors", [DoctorsController::class,"listMaleDoctors"]);
-Route::get("listFemaleDoctors", [DoctorsController::class,"listFemaleDoctors"]);
+    // Doctors management
+    Route::post("createDoctor", [DoctorsController::class,"store"]);
+    Route::delete("deleteDoctor/{id}", [DoctorsController::class,"destroy"]);
+    Route::get("listMaleDoctors", [DoctorsController::class,"listMaleDoctors"]);
+    Route::get("listFemaleDoctors", [DoctorsController::class,"listFemaleDoctors"]);
 
-//Routers for appointments
-Route::get("listAppointments", [AppointmentsController::class,"index"]);
-Route::get("showAppointments/{id}", [AppointmentsController::class,"show"]);
-Route::post("createAppointment", [AppointmentsController::class,"store"]);
-Route::put("editAppointment/{id}", [AppointmentsController::class,"update"]);
-Route::delete("deleteAppointment/{id}", [AppointmentsController::class,"destroy"]);
-Route::get("listScheduledAppointments", [AppointmentsController::class,"listScheduledAppointments"]);
+    // Appointments management
+    Route::get("listAppointments", [AppointmentsController::class,"index"]);
+    Route::get("showAppointments/{id}", [AppointmentsController::class,"show"]);
+    Route::delete("deleteAppointment/{id}", [AppointmentsController::class,"destroy"]);
+    Route::get("listScheduledAppointments", [AppointmentsController::class,"listScheduledAppointments"]);
 
-//Routers for specialties
-Route::get("listSpecialties", [SpecialtiesController::class,"index"]);
-Route::get("showSpecialties/{id}", [SpecialtiesController::class,"show"]);
-Route::post("createSpecialty", [SpecialtiesController::class,"store"]);
-Route::put("editSpecialty/{id}", [SpecialtiesController::class,"update"]);
-Route::delete("deleteSpecialty/{id}", [SpecialtiesController::class,"destroy"]);
+    // Specialties management
+    Route::get("listSpecialties", [SpecialtiesController::class,"index"]);
+    Route::get("showSpecialties/{id}", [SpecialtiesController::class,"show"]);
+    Route::post("createSpecialty", [SpecialtiesController::class,"store"]);
+    Route::put("editSpecialty/{id}", [SpecialtiesController::class,"update"]);
+    Route::delete("deleteSpecialty/{id}", [SpecialtiesController::class,"destroy"]);
 
-//Routers for entities
-Route::get("listEntities", [EntitiesController::class,"index"]);
-Route::get("showEntities/{id}", [EntitiesController::class,"show"]);
-Route::post("createEntity", [EntitiesController::class,"store"]);
-Route::put("editEntity/{id}", [EntitiesController::class,"update"]);
-Route::delete("deleteEntity/{id}", [EntitiesController::class,"destroy"]);
+    // Entities management
+    Route::get("listEntities", [EntitiesController::class,"index"]);
+    Route::get("showEntities/{id}", [EntitiesController::class,"show"]);
+    Route::post("createEntity", [EntitiesController::class,"store"]);
+    Route::put("editEntity/{id}", [EntitiesController::class,"update"]);
+    Route::delete("deleteEntity/{id}", [EntitiesController::class,"destroy"]);
+});
