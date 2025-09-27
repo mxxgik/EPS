@@ -12,7 +12,7 @@ class SpecialtiesController extends Controller
     public function index()
     {
         $Specialties = Specialties::all();
-        return response()->json($Specialties, 200);
+        return response()->json(['success' => true, 'data' => $Specialties], 200);
     }
 
     public function store(Request $request)
@@ -21,10 +21,10 @@ class SpecialtiesController extends Controller
             'specialty' => 'required|string',
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $specialty = Specialties::create($validator->validated());
-        return response()->json($specialty, 200);
+        return response()->json(['success' => true, 'data' => $specialty], 200);
     }
 
     public function show(string $id)
@@ -32,10 +32,10 @@ class SpecialtiesController extends Controller
         $specialty = Specialties::find($id);
 
         if (!$specialty) {
-            return response()->json(['message' => 'The specialty was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The specialty was not found'], 400);
         }
 
-        return response()->json($specialty, 200);
+        return response()->json(['success' => true, 'data' => $specialty], 200);
     }
 
     public function update(Request $request, string $id)
@@ -47,11 +47,11 @@ class SpecialtiesController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
         $specialty -> update($validator->validated());
-        return response()->json($specialty, 200);
+        return response()->json(['success' => true, 'data' => $specialty], 200);
 
     }
 
@@ -60,20 +60,20 @@ class SpecialtiesController extends Controller
         $specialty = Specialties::find($id);
 
         if (!$specialty) {
-            return response()->json(['message' => 'The specialty was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The specialty was not found'], 400);
         }
         $specialty->delete();
-        return response()->json(['message' => 'The specialty was deleted successfully'], 400);
+        return response()->json(['success' => true, 'message' => 'The specialty was deleted successfully'], 200);
 
     }
 
     public function listFemalePatients(){
         $femalePatients = Specialties::where('gender','F')->get();
-        return response()->json($femalePatients,200);
+        return response()->json(['success' => true, 'data' => $femalePatients],200);
     }
 
     public function listMalePatients(){
         $malePatients = Specialties::where('gender','M')->get();
-        return response()->json($malePatients,200);
+        return response()->json(['success' => true, 'data' => $malePatients],200);
     }
 }

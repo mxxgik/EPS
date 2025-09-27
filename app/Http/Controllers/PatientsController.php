@@ -11,7 +11,7 @@ class PatientsController extends Controller
     public function index()
     {
         $patients = User::where('role', 'patient')->get();
-        return response()->json($patients, 200);
+        return response()->json(['success' => true, 'data' => $patients], 200);
     }
 
     public function store(Request $request)
@@ -27,12 +27,12 @@ class PatientsController extends Controller
             'email' => 'required|string',
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $data = $validator->validated();
         $data['role'] = 'patient';
         $patient = User::create($data);
-        return response()->json($patient, 200);
+        return response()->json(['success' => true, 'data' => $patient], 200);
     }
 
     public function show(Request $request)
@@ -40,10 +40,10 @@ class PatientsController extends Controller
         $patient = $request->user();
 
         if (!$patient || $patient->role !== 'patient') {
-            return response()->json(['message' => 'The patient was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The patient was not found'], 400);
         }
 
-        return response()->json($patient, 200);
+        return response()->json(['success' => true, 'data' => $patient], 200);
     }
 
     public function update(Request $request, string $id)
@@ -52,7 +52,7 @@ class PatientsController extends Controller
         $patient = $request->user();
 
         if (!$patient || $patient->role !== 'patient') {
-            return response()->json(['message' => 'The patient was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The patient was not found'], 400);
         }
 
         $validator = Validator::make($request->all(), [
@@ -67,11 +67,11 @@ class PatientsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
         $patient->update($validator->validated());
-        return response()->json($patient, 200);
+        return response()->json(['success' => true, 'data' => $patient], 200);
 
     }
 
@@ -80,20 +80,20 @@ class PatientsController extends Controller
         $patient = User::where('id', $id)->where('role', 'patient')->first();
 
         if (!$patient) {
-            return response()->json(['message' => 'The patient was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The patient was not found'], 400);
         }
         $patient->delete();
-        return response()->json(['message' => 'The patient was deleted successfully'], 200);
+        return response()->json(['success' => true, 'message' => 'The patient was deleted successfully'], 200);
 
     }
 
     public function listFemalePatients(){
         $femalePatients = User::where('role', 'patient')->where('genero','F')->get();
-        return response()->json($femalePatients,200);
+        return response()->json(['success' => true, 'data' => $femalePatients],200);
     }
 
     public function listMalePatients(){
         $malePatients = User::where('role', 'patient')->where('genero','M')->get();
-        return response()->json($malePatients,200);
+        return response()->json(['success' => true, 'data' => $malePatients],200);
     }
 }

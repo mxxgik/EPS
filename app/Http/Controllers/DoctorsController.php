@@ -10,7 +10,7 @@ class DoctorsController extends Controller
 {
     public function index(){
         $doctors = User::where('role', 'doctor')->get();
-        return response()->json($doctors, 200);
+        return response()->json(['success' => true, 'data' => $doctors], 200);
     }
 
     public function store(Request $request)
@@ -25,12 +25,12 @@ class DoctorsController extends Controller
             'email' => 'required|string',
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $data = $validator->validated();
         $data['role'] = 'doctor';
         $doctor = User::create($data);
-        return response()->json($doctor, 200);
+        return response()->json(['success' => true, 'data' => $doctor], 200);
     }
 
     public function show(string $id)
@@ -38,10 +38,10 @@ class DoctorsController extends Controller
         $doctor = User::where('id', $id)->where('role', 'doctor')->first();
 
         if (!$doctor) {
-            return response()->json(['message' => 'The doctor was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The doctor was not found'], 400);
         }
 
-        return response()->json($doctor, 200);
+        return response()->json(['success' => true, 'data' => $doctor], 200);
     }
 
     public function update(Request $request, string $id)
@@ -49,7 +49,7 @@ class DoctorsController extends Controller
         $doctor = User::where('id', $id)->where('role', 'doctor')->first();
 
         if (!$doctor) {
-            return response()->json(['message' => 'The doctor was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The doctor was not found'], 400);
         }
 
         $validator = Validator::make($request->all(), [
@@ -63,11 +63,11 @@ class DoctorsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
         $doctor->update($validator->validated());
-        return response()->json($doctor, 200);
+        return response()->json(['success' => true, 'data' => $doctor], 200);
 
     }
 
@@ -76,21 +76,21 @@ class DoctorsController extends Controller
         $doctor = User::where('id', $id)->where('role', 'doctor')->first();
 
         if (!$doctor) {
-            return response()->json(['message' => 'The doctor was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The doctor was not found'], 400);
         }
         $doctor->delete();
-        return response()->json(['message' => 'The doctor was deleted successfully'], 200);
+        return response()->json(['success' => true, 'message' => 'The doctor was deleted successfully'], 200);
 
     }
 
     public function listFemaleDoctors(){
         $femaleDoctors = User::where('role', 'doctor')->where('genero','F')->get();
-        return response()->json($femaleDoctors,200);
+        return response()->json(['success' => true, 'data' => $femaleDoctors],200);
     }
 
     public function listMaleDoctors(){
         $maleDoctors = User::where('role', 'doctor')->where('genero','M')->get();
-        return response()->json($maleDoctors,200);
+        return response()->json(['success' => true, 'data' => $maleDoctors],200);
     }
 
     

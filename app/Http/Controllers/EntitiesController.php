@@ -11,7 +11,7 @@ class EntitiesController extends Controller
     public function index()
     {
         $Entities = Entities::all();
-        return response()->json($Entities, 200);
+        return response()->json(['success' => true, 'data' => $Entities], 200);
     }
 
     public function store(Request $request)
@@ -21,10 +21,10 @@ class EntitiesController extends Controller
             'code' => 'required|string',
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $entity = Entities::create($validator->validated());
-        return response()->json($entity, 200);
+        return response()->json(['success' => true, 'data' => $entity], 200);
     }
 
     public function show(string $id)
@@ -32,10 +32,10 @@ class EntitiesController extends Controller
         $entity = Entities::find($id);
 
         if (!$entity) {
-            return response()->json(['message' => 'The entity was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The entity was not found'], 400);
         }
 
-        return response()->json($entity, 200);
+        return response()->json(['success' => true, 'data' => $entity], 200);
     }
 
     public function update(Request $request, string $id)
@@ -48,11 +48,11 @@ class EntitiesController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
         $entity->update($validator->validated());
-        return response()->json($entity, 200);
+        return response()->json(['success' => true, 'data' => $entity], 200);
 
     }
 
@@ -61,22 +61,22 @@ class EntitiesController extends Controller
         $entity = Entities::find($id);
 
         if (!$entity) {
-            return response()->json(['message' => 'The entity was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The entity was not found'], 400);
         }
         $entity->delete();
-        return response()->json(['message' => 'The entity was deleted successfully'], 400);
+        return response()->json(['success' => true, 'message' => 'The entity was deleted successfully'], 200);
 
     }
 
     public function listFemalePatients()
     {
         $femalePatients = Entities::where('gender', 'F')->get();
-        return response()->json($femalePatients, 200);
+        return response()->json(['success' => true, 'data' => $femalePatients], 200);
     }
 
     public function listMalePatients()
     {
         $malePatients = Entities::where('gender', 'M')->get();
-        return response()->json($malePatients, 200);
+        return response()->json(['success' => true, 'data' => $malePatients], 200);
     }
 }

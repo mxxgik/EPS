@@ -11,7 +11,7 @@ class AppointmentsController extends Controller
     public function index()
     {
         $Appointments = Appointments::all();
-        return response()->json($Appointments, 200);
+        return response()->json(['success' => true, 'data' => $Appointments], 200);
     }
 
     public function store(Request $request)
@@ -24,10 +24,10 @@ class AppointmentsController extends Controller
             'status'=>'required'
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $appointment = Appointments::create($validator->validated());
-        return response()->json($appointment, 200);
+        return response()->json(['success' => true, 'data' => $appointment], 200);
     }
 
     public function show(string $id)
@@ -35,10 +35,10 @@ class AppointmentsController extends Controller
         $appointment = Appointments::find($id);
 
         if (!$appointment) {
-            return response()->json(['message' => 'The appointment was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The appointment was not found'], 400);
         }
 
-        return response()->json($appointment, 200);
+        return response()->json(['success' => true, 'data' => $appointment], 200);
     }
 
     public function update(Request $request, string $id)
@@ -54,11 +54,11 @@ class AppointmentsController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
 
         $appointment -> update($validator->validated());
-        return response()->json($appointment, 200);
+        return response()->json(['success' => true, 'data' => $appointment], 200);
 
     }
 
@@ -67,15 +67,15 @@ class AppointmentsController extends Controller
         $appointment = Appointments::find($id);
 
         if (!$appointment) {
-            return response()->json(['message' => 'The appointment was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The appointment was not found'], 400);
         }
         $appointment->delete();
-        return response()->json(['message' => 'The appointment was deleted successfully'], 400);
+        return response()->json(['success' => true, 'message' => 'The appointment was deleted successfully'], 200);
 
     }
 
     public function listScheduledAppointments(){
         $scheduledAppointments = Appointments::where('status','scheduled')->orderBy('created_at','desc')->get();
-        return response()->json($scheduledAppointments,200);
+        return response()->json(['success' => true, 'data' => $scheduledAppointments],200);
     }
 }
