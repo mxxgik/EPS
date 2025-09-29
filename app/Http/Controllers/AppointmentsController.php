@@ -10,7 +10,7 @@ class AppointmentsController extends Controller
 {
     public function index()
     {
-        $Appointments = Appointments::all();
+        $Appointments = Appointments::with('user', 'patient')->get();
         return response()->json(['success' => true, 'data' => $Appointments], 200);
     }
 
