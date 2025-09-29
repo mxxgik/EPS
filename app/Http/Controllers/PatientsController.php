@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patients;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -49,7 +50,7 @@ class PatientsController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $patient = $request->user();
+        $patient = User::find($id);
 
         if (!$patient || $patient->role !== 'patient') {
             return response()->json(['success' => false, 'message' => 'The patient was not found'], 400);
