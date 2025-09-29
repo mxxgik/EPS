@@ -9,64 +9,84 @@ use App\Http\Controllers\EntitiesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Public routes
-Route::post("login", [AuthController::class, "login"])->name("login");
-Route::post("register", [AuthController::class, "register"])->name("register");
+// Auth routes
+Route::prefix('auth')->group(function () {
+    Route::post("login", [AuthController::class, "login"])->name("login");
+    Route::post("register", [AuthController::class, "register"])->name("register");
+    Route::middleware(['auth:sanctum'])->get('logout', [AuthController::class, "logout"])->name('logout');
+});
 
 // Authenticated routes
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('logout', [AuthController::class, "logout"])->name('logout');
-    Route::get("listAppointments", [AppointmentsController::class, "index"]);
-    Route::get("listEntities", [EntitiesController::class, "index"]);
+    Route::prefix('appointments')->group(function () {
+        Route::get("list", [AppointmentsController::class, "index"]);
+        Route::put("edit/{id}", [AppointmentsController::class, "update"]);
+        Route::delete("delete/{id}", [AppointmentsController::class, "destroy"]);
+    });
+
+    Route::prefix('entities')->group(function () {
+        Route::get("list", [EntitiesController::class, "index"]);
+    });
 });
 
 // Patient-specific routes
 Route::middleware(['auth:sanctum', 'role:patient'])->group(function () {
-    Route::get("showPatient", [PatientsController::class, "show"]);
-    Route::put("editPatient", [PatientsController::class, "update"]);
-    Route::post("createAppointment", [AppointmentsController::class, "store"]);
-    Route::get("listDoctors", [DoctorsController::class, "index"]);
-    Route::put("editAppointment/{id}", [AppointmentsController::class, "update"]);
+    Route::prefix('patients')->group(function () {
+        Route::get("show", [PatientsController::class, "show"]);
+        Route::put("edit", [PatientsController::class, "update"]);
+        Route::post("appointments/create", [AppointmentsController::class, "store"]);
+    });
+
+    Route::prefix('doctors')->group(function () {
+        Route::get("list", [DoctorsController::class, "index"]);
+    });
 });
 
 // Doctor-specific routes
 Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
-    Route::get("showDoctor/{id}", [DoctorsController::class, "show"]);
-    Route::put("editDoctor/{id}", [DoctorsController::class, "update"]);
-    Route::get("listPatients", [PatientsController::class, "index"]);
-    Route::put("editAppointment/{id}", [AppointmentsController::class, "update"]);
+    Route::prefix('doctors')->group(function () {
+        Route::get("show/{id}", [DoctorsController::class, "show"]);
+        Route::put("edit/{id}", [DoctorsController::class, "update"]);
+    });
+
+    Route::prefix('patients')->group(function () {
+        Route::get("list", [PatientsController::class, "index"]);
+    });
 });
 
 // Admin-specific routes
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    // Patients management
-    Route::get("listPatients", [PatientsController::class, "index"]);
-    Route::post("createPatient", [PatientsController::class, "store"]);
-    Route::delete("deletePatient/{id}", [PatientsController::class, "destroy"]);
-    Route::get("listFemalePatients", [PatientsController::class, "listFemalePatients"]);
-    Route::get("listMalePatients", [PatientsController::class, "listMalePatients"]);
+    Route::prefix('patients')->group(function () {
+        Route::get("list", [PatientsController::class, "index"]);
+        Route::post("create", [PatientsController::class, "store"]);
+        Route::delete("delete/{id}", [PatientsController::class, "destroy"]);
+        Route::get("listFemale", [PatientsController::class, "listFemalePatients"]);
+        Route::get("listMale", [PatientsController::class, "listMalePatients"]);
+    });
 
-    // Doctors management
-    Route::post("createDoctor", [DoctorsController::class, "store"]);
-    Route::delete("deleteDoctor/{id}", [DoctorsController::class, "destroy"]);
-    Route::get("listMaleDoctors", [DoctorsController::class, "listMaleDoctors"]);
-    Route::get("listFemaleDoctors", [DoctorsController::class, "listFemaleDoctors"]);
+    Route::prefix('doctors')->group(function () {
+        Route::post("create", [DoctorsController::class, "store"]);
+        Route::delete("delete/{id}", [DoctorsController::class, "destroy"]);
+        Route::get("listMale", [DoctorsController::class, "listMaleDoctors"]);
+        Route::get("listFemale", [DoctorsController::class, "listFemaleDoctors"]);
+    });
 
-    // Appointments management
-    Route::get("showAppointments/{id}", [AppointmentsController::class, "show"]);
-    Route::delete("deleteAppointment/{id}", [AppointmentsController::class, "destroy"]);
-    Route::get("listScheduledAppointments", [AppointmentsController::class, "listScheduledAppointments"]);
+    Route::prefix('appointments')->group(function () {
+        Route::get("show/{id}", [AppointmentsController::class, "show"]);
+    });
 
-    // Specialties management
-    Route::get("listSpecialties", [SpecialtiesController::class, "index"]);
-    Route::get("showSpecialties/{id}", [SpecialtiesController::class, "show"]);
-    Route::post("createSpecialty", [SpecialtiesController::class, "store"]);
-    Route::put("editSpecialty/{id}", [SpecialtiesController::class, "update"]);
-    Route::delete("deleteSpecialty/{id}", [SpecialtiesController::class, "destroy"]);
+    Route::prefix('specialties')->group(function () {
+        Route::get("list", [SpecialtiesController::class, "index"]);
+        Route::get("show/{id}", [SpecialtiesController::class, "show"]);
+        Route::post("create", [SpecialtiesController::class, "store"]);
+        Route::put("edit/{id}", [SpecialtiesController::class, "update"]);
+        Route::delete("delete/{id}", [SpecialtiesController::class, "destroy"]);
+    });
 
-    // Entities management
-    Route::get("showEntities/{id}", [EntitiesController::class, "show"]);
-    Route::post("createEntity", [EntitiesController::class, "store"]);
-    Route::put("editEntity/{id}", [EntitiesController::class, "update"]);
-    Route::delete("deleteEntity/{id}", [EntitiesController::class, "destroy"]);
+    Route::prefix('entities')->group(function () {
+        Route::get("show/{id}", [EntitiesController::class, "show"]);
+        Route::post("create", [EntitiesController::class, "store"]);
+        Route::put("edit/{id}", [EntitiesController::class, "update"]);
+        Route::delete("delete/{id}", [EntitiesController::class, "destroy"]);
+    });
 });
