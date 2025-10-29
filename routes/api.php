@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum', 'role:patient'])->group(function () {
     Route::prefix('patients')->group(function () {
         Route::get("show", [PatientsController::class, "show"]);
         Route::put("edit/{id}", [PatientsController::class, "update"]);
+        Route::put("edit", [PatientsController::class, "updateSelf"]);
         Route::post("appointments/create", [AppointmentsController::class, "store"]);
     });
 
@@ -47,6 +48,7 @@ Route::middleware(['auth:sanctum', 'role:doctor'])->group(function () {
     Route::prefix('doctors')->group(function () {
         Route::get("show/{id}", [DoctorsController::class, "show"]);
         Route::put("edit/{id}", [DoctorsController::class, "update"]);
+        Route::put("edit", [DoctorsController::class, "updateSelf"]);
     });
 
     Route::prefix('patients')->group(function () {

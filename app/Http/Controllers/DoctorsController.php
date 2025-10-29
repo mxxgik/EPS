@@ -71,6 +71,31 @@ class DoctorsController extends Controller
 
     }
 
+    public function updateSelf(Request $request)
+    {
+        $doctor = $request->user();
+
+        if (!$doctor || $doctor->role !== 'doctor') {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
+            'identification' => 'sometimes|string',
+            'genero' => 'sometimes|in:M,F',
+            'phone' => 'sometimes|string',
+            'email' => 'sometimes|string|email|unique:users,email,' . $doctor->id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
+        }
+
+        $doctor->update($validator->validated());
+        return response()->json(['success' => true, 'data' => $doctor], 200);
+    }
+
     public function destroy(string $id)
     {
         $doctor = User::where('id', $id)->where('role', 'doctor')->first();

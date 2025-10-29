@@ -76,6 +76,32 @@ class PatientsController extends Controller
 
     }
 
+    public function updateSelf(Request $request)
+    {
+        $patient = $request->user();
+
+        if (!$patient || $patient->role !== 'patient') {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
+            'identification' => 'sometimes|string',
+            'dob' => 'sometimes|date',
+            'genero' => 'sometimes|in:M,F',
+            'phone' => 'sometimes|string',
+            'email' => 'sometimes|string|email|unique:users,email,' . $patient->id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
+        }
+
+        $patient->update($validator->validated());
+        return response()->json(['success' => true, 'data' => $patient], 200);
+    }
+
     public function destroy(string $id)
     {
         $patient = User::where('id', $id)->where('role', 'patient')->first();
