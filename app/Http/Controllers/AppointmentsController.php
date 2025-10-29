@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointments;
+use App\Mail\AppointmentConfirmationEmail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class AppointmentsController extends Controller
@@ -27,6 +29,11 @@ class AppointmentsController extends Controller
             return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $appointment = Appointments::create($validator->validated());
+
+        // Send confirmation email to patient
+        $appointmentWithRelations = Appointments::with('user', 'patient')->find($appointment->id);
+        Mail::to($appointmentWithRelations->patient->email)->send(new AppointmentConfirmationEmail($appointmentWithRelations));
+
         return response()->json(['success' => true, 'data' => $appointment], 200);
     }
 
