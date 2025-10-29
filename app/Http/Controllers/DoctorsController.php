@@ -23,6 +23,7 @@ class DoctorsController extends Controller
             'genero' => 'required',
             'phone' => 'required|string',
             'email' => 'required|string',
+            'dob' => 'sometimes|date',
         ]);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
@@ -60,6 +61,7 @@ class DoctorsController extends Controller
             'genero' => 'required',
             'phone' => 'required|string',
             'email' => 'required|string',
+            'dob' => 'sometimes|date',
         ]);
 
         if ($validator->fails()) {
@@ -86,6 +88,7 @@ class DoctorsController extends Controller
             'genero' => 'sometimes|in:M,F',
             'phone' => 'sometimes|string',
             'email' => 'sometimes|string|email|unique:users,email,' . $doctor->id,
+            'dob' => 'sometimes|date',
         ]);
 
         if ($validator->fails()) {
