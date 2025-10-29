@@ -23,6 +23,7 @@ class AuthController extends Controller
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8',
                 'role' => 'sometimes|in:patient,doctor',
+                'dob' => 'sometimes|date',
             ]);
 
             $user = User::create([
@@ -79,6 +80,13 @@ class AuthController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'role' => $user->role,
+                    'last_name' => $user->last_name,
+                    'identification' => $user->identification,
+                    'phone' => $user->phone,
+                    'dob' => $user->dob,
+                    'genero' => $user->genero,
+                    'entity_id' => $user->entity_id,
+                    'specialty_id' => $user->specialty_id,
                 ],
                 'token' => $token,
                 'token_type' => 'Bearer',
