@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Mail\WelcomeEmail;
 
 class AuthController extends Controller
 {
@@ -34,7 +36,11 @@ class AuthController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'role' => $validated['role'] ?? 'patient',
+                'dob' => $validated['dob']
             ]);
+
+            // Send welcome email
+            Mail::to($user->email)->send(new WelcomeEmail($user));
 
             return response()->json([
                 'response_code' => 201,
