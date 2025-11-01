@@ -64,6 +64,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
         Route::delete("delete/{id}", [PatientsController::class, "destroy"]);
         Route::get("listFemale", [PatientsController::class, "listFemalePatients"]);
         Route::get("listMale", [PatientsController::class, "listMalePatients"]);
+        Route::get("listAll", [PatientsController::class, "listAllUsers"]);
     });
 
     Route::prefix('doctors')->group(function () {
