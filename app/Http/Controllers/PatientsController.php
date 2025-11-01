@@ -18,7 +18,7 @@ class PatientsController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'entity_id' => 'required|numeric',
+            'entity_id' => 'nullable|numeric',
             'name' => 'required|string',
             'last_name' => 'required|string',
             'identification' => 'required|string',
@@ -26,12 +26,12 @@ class PatientsController extends Controller
             'genero' => 'required',
             'phone' => 'required|string',
             'email' => 'required|string',
+            'role' => 'required|in:doctor,patient,admin',
         ]);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'errors' => $validator->errors()], 400);
         }
         $data = $validator->validated();
-        $data['role'] = 'patient';
         $patient = User::create($data);
         return response()->json(['success' => true, 'data' => $patient], 200);
     }
@@ -52,12 +52,12 @@ class PatientsController extends Controller
 
         $patient = User::find($id);
 
-        if (!$patient || $patient->role !== 'patient') {
-            return response()->json(['success' => false, 'message' => 'The patient was not found'], 400);
+        if (!$patient) {
+            return response()->json(['success' => false, 'message' => 'The user was not found'], 400);
         }
 
         $validator = Validator::make($request->all(), [
-            'entity_id' => 'required|numeric',
+            'entity_id' => 'nullable|numeric',
             'name' => 'required|string',
             'last_name' => 'required|string',
             'identification' => 'required|string',
@@ -65,6 +65,7 @@ class PatientsController extends Controller
             'genero' => 'required',
             'phone' => 'required|string',
             'email' => 'required|string',
+            'role' => 'required|in:doctor,patient,admin',
         ]);
 
         if ($validator->fails()) {
@@ -104,13 +105,13 @@ class PatientsController extends Controller
 
     public function destroy(string $id)
     {
-        $patient = User::where('id', $id)->where('role', 'patient')->first();
+        $patient = User::find($id);
 
         if (!$patient) {
-            return response()->json(['success' => false, 'message' => 'The patient was not found'], 400);
+            return response()->json(['success' => false, 'message' => 'The user was not found'], 400);
         }
         $patient->delete();
-        return response()->json(['success' => true, 'message' => 'The patient was deleted successfully'], 200);
+        return response()->json(['success' => true, 'message' => 'The user was deleted successfully'], 200);
 
     }
 
@@ -122,5 +123,10 @@ class PatientsController extends Controller
     public function listMalePatients(){
         $malePatients = User::where('role', 'patient')->where('genero','M')->get();
         return response()->json(['success' => true, 'data' => $malePatients],200);
+    }
+
+    public function listAllUsers(){
+        $users = User::all();
+        return response()->json(['success' => true, 'data' => $users], 200);
     }
 }
